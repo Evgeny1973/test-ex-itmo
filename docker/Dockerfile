@@ -23,7 +23,6 @@ RUN apk update \
         libwebp-dev \
         freetype \
         freetype-dev \
-        postgresql-dev \
         curl \
         wget \
         bash
@@ -37,7 +36,7 @@ RUN docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) \
     intl \
     gd \
     bcmath \
-    pdo_pgsql \
+    pdo_mysql \
     sockets \
     zip
 RUN pecl channel-update pecl.php.net \

@@ -45,7 +45,7 @@ services:
       PMA_PASSWORD: root
       UPLOAD_LIMIT: 100000000
     ports:
-      - "127.0.0.1:8080:80"
+      - "8080:80"
 
 networks:
   default:
