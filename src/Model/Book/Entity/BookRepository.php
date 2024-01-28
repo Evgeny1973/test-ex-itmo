@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Author\Entity;
+namespace App\Model\Book\Entity;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\Persistence\ObjectRepository;
 
-final class AuthorRepository
+final class BookRepository
 {
     private EntityManagerInterface $em;
     private ObjectRepository $repo;
@@ -16,20 +16,20 @@ final class AuthorRepository
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-        $this->repo = $em->getRepository(Author::class);
+        $this->repo = $em->getRepository(Book::class);
     }
     
-    public function get(int $id): Author
+    public function get(int $id): Book
     {
-        if (!$author = $this->repo->find($id)) {
-            throw new EntityNotFoundException('Author not found');
+        if (!$book = $this->repo->find($id)) {
+            throw new EntityNotFoundException('Book not found');
         }
         
-        return $author;
+        return $book;
     }
     
-    public function add(Author $author): void
+    public function add(Book $book): void
     {
-        $this->em->persist($author);
+        $this->em->persist($book);
     }
 }

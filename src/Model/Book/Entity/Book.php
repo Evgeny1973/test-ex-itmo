@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'books')]
 #[ORM\UniqueConstraint(name: 'bookTitleIsbn', columns: ['title', 'isbn'])]
-#[ORM\UniqueConstraint(name: 'bookTitlePublishedAt', columns: ['title', 'published_at'])]
+#[ORM\UniqueConstraint(name: 'bookTitlePublished', columns: ['title', 'published'])]
 class Book
 {
     #[ORM\Id]
@@ -24,10 +24,10 @@ class Book
     #[ORM\Column(type: Types::STRING)]
     private string $title;
     
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private \DateTimeInterface $publishedAt;
+    #[ORM\Column(type: Types::INTEGER, length: 4)]
+    private int $published;
     
-    #[ORM\Column(type: Types::STRING, length: 13)]
+    #[ORM\Column(type: Types::STRING)]
     private string $isbn;
     
     #[ORM\Column(type: Types::INTEGER)]
@@ -40,6 +40,9 @@ class Book
     #[ORM\JoinTable(name: 'books_authors')]
     private Collection $authors;
     
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isDeleted;
+    
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $createdAt;
     
@@ -49,26 +52,28 @@ class Book
     public function __construct()
     {
         $this->authors = new ArrayCollection();
+        $this->isDeleted = false;
         $this->createdAt = new \DateTimeImmutable('now');
     }
     
-    public static function create(string $title, \DateTimeImmutable $publishedAt, string $isbn, int $pages): Book
+    public static function create(string $title, int $published, string $isbn, int $pages): Book
     {
         $book = new self();
         $book->title = $title;
-        $book->publishedAt = $publishedAt;
+        $book->published = $published;
         $book->isbn = $isbn;
         $book->pages = $pages;
         
         return $book;
     }
     
-    public function edit(string $title, \DateTimeImmutable $publishedAt, string $isbn, int $pages): void
+    public function edit(string $title, int $published, string $isbn, int $pages): void
     {
         $this->title = $title;
-        $this->publishedAt = $publishedAt;
+        $this->published = $published;
         $this->isbn = $isbn;
         $this->pages = $pages;
+        $this->updatedAt = new \DateTimeImmutable('now');
     }
     
     public function addAuthor(Author $author): void
@@ -88,6 +93,11 @@ class Book
         }
     }
     
+    public function delete(): void
+    {
+        $this->isDeleted = true;
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -98,9 +108,9 @@ class Book
         return $this->title;
     }
     
-    public function getPublishedAt(): \DateTimeInterface
+    public function getPublished(): int
     {
-        return $this->publishedAt;
+        return $this->published;
     }
     
     public function getIsbn(): string
@@ -121,6 +131,11 @@ class Book
     public function getAuthors(): Collection
     {
         return $this->authors;
+    }
+    
+    public function isDeleted(): bool
+    {
+        return $this->isDeleted;
     }
     
     public function getCreatedAt(): \DateTimeImmutable

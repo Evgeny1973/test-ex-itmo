@@ -30,6 +30,9 @@ class Author
     #[ORM\ManyToMany(targetEntity: Book::class, mappedBy: 'authors')]
     private Collection $books;
     
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isDeleted;
+    
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $createdAt;
     
@@ -39,6 +42,7 @@ class Author
     public function __construct()
     {
         $this->books = new ArrayCollection();
+        $this->isDeleted = false;
         $this->createdAt = new \DateTimeImmutable('now');
     }
     
@@ -57,6 +61,11 @@ class Author
         $this->firstName = $firstName;
         $this->middleName = $middleName;
         $this->lastName = $lastName;
+    }
+    
+    public function delete(): void
+    {
+        $this->isDeleted = true;
     }
     
     public function addBook(Book $book): void
@@ -99,6 +108,11 @@ class Author
     public function getBooks(): Collection
     {
         return $this->books;
+    }
+    
+    public function isDeleted(): bool
+    {
+        return $this->isDeleted;
     }
     
     public function getCreatedAt(): \DateTimeImmutable
