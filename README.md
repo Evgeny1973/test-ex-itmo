@@ -10,6 +10,7 @@ test exercise for itmo
 
 **Start:**
 ```
+git clone https://github.com/Evgeny1973/test-ex-itmo.git itmo
 docker-compose up -d
 docker exec -it php sh
 php bin/console doctrine:database:create
