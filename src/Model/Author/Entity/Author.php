@@ -61,6 +61,8 @@ class Author
         $this->firstName = $firstName;
         $this->middleName = $middleName;
         $this->lastName = $lastName;
+        
+        $this->updatedAt = new \DateTimeImmutable('now');
     }
     
     public function delete(): void
