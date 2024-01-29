@@ -18,7 +18,7 @@ final class AuthorFixtures extends Fixture
         for ($i = 0; $i < 10; $i++) {
             $author = Author::create(
                 $faker->firstName,
-                $faker->lastName,
+                $faker->firstName,
                 $faker->lastName,
             );
             
