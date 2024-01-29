@@ -25,6 +25,8 @@ final class AuthorFixtures extends Fixture
             $manager->persist($author);
         }
         
+        $this->setReference('author', $author);
+        
         $manager->flush();
     }
 }
