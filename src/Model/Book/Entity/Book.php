@@ -93,6 +93,11 @@ class Book
         }
     }
     
+    public function attachCover(string $image): void
+    {
+        $this->image = $image;
+    }
+    
     public function delete(): void
     {
         $this->isDeleted = true;
