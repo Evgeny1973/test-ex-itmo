@@ -11,7 +11,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class BookUploadCoverCommand
 {
     public function __construct(
-        #[Assert\NotNull]
         #[Assert\Image(maxSize: '1M', mimeTypes: ['image/jpeg', 'image/png', 'image/jpg'])]
         public readonly UploadedFile $file,
         #[Assert\NotNull]

@@ -13,10 +13,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[AsController]
 final class UploadCover
 {
+    public function __construct(private readonly ValidatorInterface $validator)
+    {
+    }
+    
     #[Route('/book/{book}/cover/upload', name: 'book_cover_upload', methods: [Request::METHOD_POST])]
     public function __invoke(
         Request $request,
@@ -30,6 +35,11 @@ final class UploadCover
             $book,
             $path
         );
+        
+        $errors = $this->validator->validate($command);
+        if (\count($errors) > 0) {
+            return new JsonResponse(['errors' => (string) $errors], Response::HTTP_BAD_REQUEST);
+        }
         
         try {
             $handler->handle($command);
